@@ -1,0 +1,11 @@
+{
+  "title": "pro-salt",
+  "description": "Application de gestion des réservations des salons VIP SALT — Aéroport International Gnassingbé Eyadema, Lomé.",
+  "robots": {
+    "index": false
+  },
+  "accessibility": {
+    "addBypassLinks": false,
+    "ignoreReducedMotion": false
+  }
+}
