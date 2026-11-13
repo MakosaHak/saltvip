@@ -1,0 +1,11 @@
+SALT VIP — copie complète du projet
+
+Pour ouvrir le projet :
+1. Extraire ce zip
+2. Ouvrir le dossier SALT-VIP-projet
+3. npm install
+4. npm run dev
+
+Pour déployer sur Netlify (glisser-déposer) :
+- glisse le dossier dist/ (celui qui contient index.html)
+  ou le zip plat des fichiers de dist/

@@ -1,0 +1,14 @@
+{
+  "title": "FacilRESA",
+  "description": "Application de gestion des réservations des salons VIP — Aéroport International Gnassingbé Eyadema, Lomé.",
+  "icons": {
+    "icon": "/facilresa-logo.png"
+  },
+  "robots": {
+    "index": false
+  },
+  "accessibility": {
+    "addBypassLinks": false,
+    "ignoreReducedMotion": false
+  }
+}

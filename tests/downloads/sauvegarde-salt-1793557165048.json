@@ -1,0 +1,187 @@
+{
+  "accounts": [
+    {
+      "id": "A-MVY5MIT307",
+      "name": "Kafui IMPORT",
+      "prenom": "Kafui",
+      "nom": "IMPORT",
+      "profession": "Officier de Protocole",
+      "nationalite": "",
+      "email": "kafui.import@gouv.tg",
+      "password": "Facilsup68w",
+      "role": "protocole",
+      "societe": "Ministère de la Santé",
+      "salon": "—",
+      "telephone": "+228 90 99 99 99",
+      "actif": true,
+      "codeProtocole": "PTC-IMP001"
+    },
+    {
+      "id": "A-MVY5MD5707",
+      "name": "Protocole Recette",
+      "prenom": "Protocole",
+      "nom": "RECETTE",
+      "profession": "Officier de Protocole",
+      "nationalite": "",
+      "email": "recette.proto@gouv.tg",
+      "password": "Recette2026",
+      "role": "protocole",
+      "societe": "",
+      "salon": "—",
+      "telephone": "",
+      "actif": true,
+      "codeProtocole": "PTC-TD5X3N"
+    },
+    {
+      "id": "A-MVY5M72O08",
+      "name": "Hôtesse Recette",
+      "prenom": "Hôtesse",
+      "nom": "RECETTE",
+      "profession": "Hôtesse",
+      "nationalite": "",
+      "email": "recette.hotesse@salt.tg",
+      "password": "Recette2026",
+      "role": "hostess",
+      "societe": "",
+      "salon": "Salon Plus",
+      "telephone": "",
+      "actif": false,
+      "codeProtocole": ""
+    },
+    {
+      "id": "A0",
+      "name": "Administrateur SALT",
+      "prenom": "Administrateur",
+      "nom": "SALT",
+      "profession": "Administrateur",
+      "nationalite": "",
+      "email": "admin@salt.tg",
+      "password": "SaltAdmin2026",
+      "role": "admin",
+      "societe": "SALT",
+      "salon": "—",
+      "telephone": "+228 22 23 00 00",
+      "actif": true,
+      "codeProtocole": ""
+    },
+    {
+      "id": "A1",
+      "name": "Akosua KPOTO",
+      "prenom": "Akosua",
+      "nom": "KPOTO",
+      "profession": "Hôtesse",
+      "nationalite": "",
+      "email": "akosua@salt.tg",
+      "password": "SaltHostess2026",
+      "role": "hostess",
+      "societe": "SALT",
+      "salon": "Salon Solidarité",
+      "telephone": "+228 90 11 11 11",
+      "actif": true,
+      "codeProtocole": ""
+    },
+    {
+      "id": "A2",
+      "name": "Adjoua AMEVI",
+      "prenom": "Adjoua",
+      "nom": "AMEVI",
+      "profession": "Hôtesse",
+      "nationalite": "",
+      "email": "adjoua@salt.tg",
+      "password": "SaltHostess2026",
+      "role": "hostess",
+      "societe": "SALT",
+      "salon": "Salon Plus",
+      "telephone": "+228 90 22 22 22",
+      "actif": true,
+      "codeProtocole": ""
+    },
+    {
+      "id": "P1",
+      "name": "Mme AFIA Kodjo",
+      "prenom": "AFIA",
+      "nom": "KODJO",
+      "profession": "Officier de Protocole",
+      "nationalite": "",
+      "email": "afia@gouv.tg",
+      "password": "SaltProto2026",
+      "role": "protocole",
+      "societe": "Ministère des Affaires Étrangères",
+      "salon": "—",
+      "telephone": "+228 90 00 00 00",
+      "actif": true,
+      "codeProtocole": "PTC-KODJO1"
+    },
+    {
+      "id": "P2",
+      "name": "Amara KOFFI",
+      "prenom": "Amara",
+      "nom": "KOFFI",
+      "profession": "Officier de Protocole",
+      "nationalite": "",
+      "email": "amara@boad.org",
+      "password": "SaltProto2026",
+      "role": "protocole",
+      "societe": "BOAD",
+      "salon": "—",
+      "telephone": "+228 91 00 00 00",
+      "actif": true,
+      "codeProtocole": "PTC-KOFFI1"
+    }
+  ],
+  "salons": [
+    {
+      "id": "S1",
+      "nom": "Salon Solidarité",
+      "capacite": 45,
+      "quota": 50,
+      "actif": true
+    },
+    {
+      "id": "S2",
+      "nom": "Salon Plus",
+      "capacite": 30,
+      "quota": 35,
+      "actif": true
+    }
+  ],
+  "compagnies": [
+    {
+      "open": true,
+      "nom": "Air Burkina",
+      "code": "2J",
+      "id": "C-MVY5ML460B"
+    },
+    {
+      "id": "C1",
+      "nom": "Air France",
+      "code": "AF"
+    },
+    {
+      "id": "C2",
+      "nom": "ASKY Airlines",
+      "code": "KP"
+    },
+    {
+      "id": "C3",
+      "nom": "Ethiopian Airlines",
+      "code": "ET"
+    },
+    {
+      "id": "C4",
+      "nom": "Royal Air Maroc",
+      "code": "AT"
+    },
+    {
+      "id": "C5",
+      "nom": "Air Côte d'Ivoire",
+      "code": "HF"
+    },
+    {
+      "id": "C6",
+      "nom": "Brussels Airlines",
+      "code": "SN"
+    }
+  ],
+  "at": "2026-11-01T18:19:25.047Z"
+}

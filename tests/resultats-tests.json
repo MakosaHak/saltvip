@@ -1,0 +1,554 @@
+{
+  "date": "2026-11-01T18:19:40.179Z",
+  "results": [
+    {
+      "id": "TF-00",
+      "module": "Qualité du code",
+      "name": "Compilation TypeScript et build de production",
+      "procedure": "Exécuter `tsc --noEmit` puis `vite build`.",
+      "expected": "Aucune erreur de typage ; bundle de production généré.",
+      "obtained": "0 erreur TypeScript ; build réussi (dist/ généré).",
+      "status": "Réussi"
+    },
+    {
+      "id": "TF-01",
+      "module": "Authentification",
+      "name": "Accès anonyme aux pages protégées",
+      "procedure": "Sans session, saisir directement /admin/checking, /admin/systeme, /reservation et /mes-reservations.",
+      "expected": "Redirection systématique vers /connexion.",
+      "obtained": "Les 4 URL redirigent vers /connexion.",
+      "status": "Réussi"
+    },
+    {
+      "id": "TF-02",
+      "module": "Authentification",
+      "name": "Soumission du formulaire vide",
+      "procedure": "Cliquer sur « Entrer » sans saisir email ni mot de passe.",
+      "expected": "Formulaire bloqué (champs obligatoires), aucune connexion.",
+      "obtained": "Champ email signalé « obligatoire », l'utilisateur reste sur /connexion.",
+      "status": "Réussi"
+    },
+    {
+      "id": "TF-03",
+      "module": "Authentification",
+      "name": "Email au format invalide",
+      "procedure": "Saisir « admin » (sans @) et un mot de passe, puis valider.",
+      "expected": "Le navigateur refuse le format, aucune connexion.",
+      "obtained": "Format rejeté (typeMismatch), pas de connexion.",
+      "status": "Réussi"
+    },
+    {
+      "id": "TF-04",
+      "module": "Authentification",
+      "name": "Mot de passe erroné",
+      "procedure": "Saisir admin@salt.tg avec un mauvais mot de passe.",
+      "expected": "Message « Identifiants incorrects ou compte inactif », accès refusé.",
+      "obtained": "Message d'erreur affiché : « Identifiants incorrects ou compte inactif » ; reste sur /connexion.",
+      "status": "Réussi"
+    },
+    {
+      "id": "TF-05",
+      "module": "Authentification",
+      "name": "Compte inexistant",
+      "procedure": "Saisir inconnu@salt.tg / Test1234.",
+      "expected": "Accès refusé avec message d'erreur.",
+      "obtained": "Accès refusé, message d'erreur affiché.",
+      "status": "Réussi"
+    },
+    {
+      "id": "TF-06",
+      "module": "Authentification",
+      "name": "Connexion administrateur valide",
+      "procedure": "Se connecter avec admin@salt.tg / SaltAdmin2026.",
+      "expected": "Redirection vers /admin/reservation et menu complet (8 entrées).",
+      "obtained": "Arrivée sur /admin/reservation ; menu : Réserver, Checking, Réservation, État passagers, Supervision, Exports, Analytics, Comptes.",
+      "status": "Réussi"
+    },
+    {
+      "id": "TF-07",
+      "module": "Authentification",
+      "name": "Email insensible à la casse",
+      "procedure": "Se connecter avec ADMIN@SALT.TG (majuscules) et le bon mot de passe.",
+      "expected": "Connexion acceptée.",
+      "obtained": "Connexion réussie, email normalisé.",
+      "status": "Réussi"
+    },
+    {
+      "id": "TF-08",
+      "module": "Authentification",
+      "name": "Utilisateur déjà connecté sur /connexion",
+      "procedure": "Connecté en admin, saisir l'URL /connexion.",
+      "expected": "Renvoi automatique vers l'espace de l'utilisateur.",
+      "obtained": "Redirigé vers /admin/reservation (pas de double connexion).",
+      "status": "Réussi"
+    },
+    {
+      "id": "TF-09",
+      "module": "Authentification",
+      "name": "Déconnexion",
+      "procedure": "Cliquer sur « Déconnexion » puis tenter de revenir sur /admin/checking.",
+      "expected": "Retour à /connexion ; la page protégée n'est plus accessible.",
+      "obtained": "Session détruite ; /admin/checking redirige vers /connexion.",
+      "status": "Réussi"
+    },
+    {
+      "id": "TF-10",
+      "module": "Contrôle d'accès (RBAC)",
+      "name": "Menu restreint de l'hôtesse",
+      "procedure": "Se connecter avec akosua@salt.tg (hôtesse).",
+      "expected": "4 entrées seulement : Réserver, Checking, Réservation, État passagers.",
+      "obtained": "Menu affiché : Réserver, Checking, Réservation, État passagers.",
+      "status": "Réussi"
+    },
+    {
+      "id": "TF-11",
+      "module": "Contrôle d'accès (RBAC)",
+      "name": "Hôtesse : saisie manuelle d'URL admin",
+      "procedure": "Connectée en hôtesse, saisir /admin/systeme, /admin/supervision, /admin/exports, /admin/analytics.",
+      "expected": "Chaque URL renvoie vers /admin/reservation.",
+      "obtained": "Les 4 pages réservées à l'admin sont inaccessibles (redirection).",
+      "status": "Réussi"
+    },
+    {
+      "id": "TF-12",
+      "module": "Contrôle d'accès (RBAC)",
+      "name": "Connexion protocole",
+      "procedure": "Se connecter avec afia@gouv.tg (protocole).",
+      "expected": "Arrivée sur /reservation ; nom et code protocole affichés.",
+      "obtained": "Arrivée sur /reservation, en-tête « Mme AFIA Kodjo — PTC-KODJO1 ».",
+      "status": "Réussi"
+    },
+    {
+      "id": "TF-13",
+      "module": "Contrôle d'accès (RBAC)",
+      "name": "Protocole : accès aux pages staff",
+      "procedure": "Connecté en protocole, saisir /admin/checking puis /admin/systeme.",
+      "expected": "Renvoi vers /reservation.",
+      "obtained": "Accès refusé, redirection vers /reservation.",
+      "status": "Réussi"
+    },
+    {
+      "id": "TF-14",
+      "module": "Contrôle d'accès (RBAC)",
+      "name": "Admin : accès à l'espace protocole",
+      "procedure": "Connecté en admin, saisir /reservation et /mes-reservations.",
+      "expected": "Renvoi vers /admin/reservation (espaces cloisonnés).",
+      "obtained": "Redirection vers /admin/reservation.",
+      "status": "Réussi"
+    },
+    {
+      "id": "TF-15",
+      "module": "Réservation (protocole)",
+      "name": "Formulaire vide",
+      "procedure": "Ouvrir /reservation sans rien saisir.",
+      "expected": "Bouton « Enregistrer la réservation » désactivé.",
+      "obtained": "Bouton désactivé.",
+      "status": "Réussi"
+    },
+    {
+      "id": "TF-16",
+      "module": "Réservation (protocole)",
+      "name": "Champ obligatoire manquant (n° de vol)",
+      "procedure": "Renseigner nom, prénom, profession, provenance, date, sans numéro de vol.",
+      "expected": "Bouton toujours désactivé.",
+      "obtained": "Bouton désactivé tant que le vol n'est pas saisi.",
+      "status": "Réussi"
+    },
+    {
+      "id": "TF-17",
+      "module": "Réservation (protocole)",
+      "name": "Accompagnateur incomplet",
+      "procedure": "Saisir le vol, choisir « Oui » accompagnateurs, porter le nombre à 2, laisser la profession du 2e vide.",
+      "expected": "Bouton désactivé tant que chaque accompagnateur n'a pas nom, prénom et profession.",
+      "obtained": "Désactivé sans profession, activé une fois la profession saisie.",
+      "status": "Réussi"
+    },
+    {
+      "id": "TF-18",
+      "module": "Réservation (protocole)",
+      "name": "Enregistrement d'une réservation complète",
+      "procedure": "Valider : 1 passager (Jean TESTEUR, AF 999, Salon Plus, date du jour) + 2 accompagnateurs.",
+      "expected": "Écran « Réservation enregistrée » avec référence ; notification de succès.",
+      "obtained": "Confirmation affichée, référence R-MVY5L6AF0B ; « Réservation enregistrée — 1 passager(s), 2 accompagnateur(s) ».",
+      "status": "Réussi"
+    },
+    {
+      "id": "TF-19",
+      "module": "Réservation (protocole)",
+      "name": "Réservation multi-passagers",
+      "procedure": "Nouvelle réservation : « Ajouter un autre passager » ; P1 Afi ADJO (KP 100, aujourd'hui), P2 Koffi BIOVA (KP 200, J+3).",
+      "expected": "Les 2 passagers sont enregistrés, chacun avec son vol et sa date.",
+      "obtained": "« Réservation enregistrée — 2 passager(s) ».",
+      "status": "Réussi"
+    },
+    {
+      "id": "TF-19b",
+      "module": "Réservation (protocole)",
+      "name": "Unicité des identifiants enregistrés",
+      "procedure": "Lire les réservations stockées et comparer les identifiants des passagers et accompagnateurs d'une même réservation.",
+      "expected": "Chaque personne possède un identifiant unique.",
+      "obtained": "Tous les identifiants sont uniques.",
+      "status": "Réussi"
+    },
+    {
+      "id": "TF-20",
+      "module": "Réservation (protocole)",
+      "name": "Suivi dans « Mes réservations »",
+      "procedure": "Ouvrir /mes-reservations.",
+      "expected": "Les réservations créées apparaissent avec passagers, accompagnateurs et statut « En attente » de checking.",
+      "obtained": "Les 5 personnes sont listées avec le statut « En attente ».",
+      "status": "Réussi"
+    },
+    {
+      "id": "TF-21",
+      "module": "Réservation (protocole)",
+      "name": "Cloisonnement entre protocoles",
+      "procedure": "Se connecter avec un autre protocole (amara@boad.org) et ouvrir « Mes réservations ».",
+      "expected": "Les réservations de Mme AFIA ne sont pas visibles.",
+      "obtained": "Seules ses propres réservations sont visibles (Yawa SAVI).",
+      "status": "Réussi"
+    },
+    {
+      "id": "TF-22",
+      "module": "Réservation (staff)",
+      "name": "Hôtesse : protocole demandeur obligatoire",
+      "procedure": "Connectée en hôtesse, remplir un passager complet sans choisir de protocole.",
+      "expected": "Bouton désactivé ; il s'active après sélection du protocole.",
+      "obtained": "Désactivé sans protocole, activé après sélection de « Amara KOFFI — PTC-KOFFI1 ».",
+      "status": "Réussi"
+    },
+    {
+      "id": "TF-23",
+      "module": "Réservation (staff)",
+      "name": "Hôtesse : réservation pour le compte d'un protocole",
+      "procedure": "Valider la réservation de Yao AMEGAN puis ouvrir la liste « Réservation » (/admin/planning) et rechercher « AMEGAN ».",
+      "expected": "Réservation visible, rattachée au protocole Amara KOFFI.",
+      "obtained": "Ligne trouvée : protocole « Amara KOFFI — PTC-KOFFI1 ».",
+      "status": "Réussi"
+    },
+    {
+      "id": "TF-24",
+      "module": "Liste des réservations",
+      "name": "Filtre par salon",
+      "procedure": "Sur /admin/planning, effacer la recherche et cliquer sur le filtre « Plus ».",
+      "expected": "Seules les personnes du Salon Plus sont listées.",
+      "obtained": "4 ligne(s), toutes « Salon Plus ».",
+      "status": "Réussi"
+    },
+    {
+      "id": "TF-25",
+      "module": "Checking",
+      "name": "Recherche nominative",
+      "procedure": "Sur /admin/checking, rechercher « Afi ADJO » puis « TESTEUR ».",
+      "expected": "« Afi ADJO » : seule la fiche d'Afi ADJO ; « TESTEUR » : Jean TESTEUR et ses 2 accompagnateurs, chacun une seule fois.",
+      "obtained": "« ADJO » → Afi ADJO ; « TESTEUR » → Jean TESTEUR, Marie DUPONT, Paul KOMLAN.",
+      "status": "Réussi"
+    },
+    {
+      "id": "TF-26",
+      "module": "Checking",
+      "name": "Validation d'entrée le jour J",
+      "procedure": "Cliquer « Valider l'entrée » sur Jean TESTEUR (vol du jour).",
+      "expected": "Notification « validé — entrée au salon autorisée » ; la fiche quitte la liste « À valider ».",
+      "obtained": "« Jean TESTEUR validé — entrée au salon autorisée ».",
+      "status": "Réussi"
+    },
+    {
+      "id": "TF-27",
+      "module": "Checking",
+      "name": "Traçabilité et anti-double validation",
+      "procedure": "Ouvrir l'onglet « Déjà entrés ».",
+      "expected": "Jean TESTEUR affiché « Validé » avec heure et nom de l'agent ; plus de bouton de validation.",
+      "obtained": "Fiche « Validé — 01/11 19:18 par Akosua KPOTO », aucun bouton de revalidation.",
+      "status": "Réussi"
+    },
+    {
+      "id": "TF-28",
+      "module": "Checking",
+      "name": "Blocage avant le jour J",
+      "procedure": "Onglet « À valider », rechercher « BIOVA » (vol à J+3).",
+      "expected": "Bouton « Bloqué avant jour J » désactivé ; validation impossible.",
+      "obtained": "Bouton « Bloqué avant jour J » désactivé (mention « Dans 3 jours »).",
+      "status": "Réussi"
+    },
+    {
+      "id": "TF-29",
+      "module": "Checking",
+      "name": "Filtre par salon et par jour J",
+      "procedure": "Effacer la recherche, cliquer « Solidarité » puis « Aujourd'hui (Jour J) ».",
+      "expected": "Seules les personnes du Salon Solidarité prévues aujourd'hui sont affichées.",
+      "obtained": "4 fiche(s), toutes « Salon Solidarité » datées du 01/11/2026.",
+      "status": "Réussi"
+    },
+    {
+      "id": "TF-30",
+      "module": "Checking",
+      "name": "Validation d'un accompagnateur (isolation)",
+      "procedure": "Valider Marie DUPONT (accompagnatrice de Jean TESTEUR).",
+      "expected": "Seule Marie DUPONT est validée ; Paul KOMLAN (2e accompagnateur) reste « À valider ».",
+      "obtained": "Seule Marie DUPONT est validée.",
+      "status": "Réussi"
+    },
+    {
+      "id": "TF-31",
+      "module": "Checking",
+      "name": "Validation d'un passager d'une réservation multi-passagers",
+      "procedure": "Valider Afi ADJO (aujourd'hui) ; vérifier Koffi BIOVA (même réservation, J+3).",
+      "expected": "Koffi BIOVA reste non validé et bloqué jusqu'au jour J.",
+      "obtained": "Koffi BIOVA reste bloqué.",
+      "status": "Réussi"
+    },
+    {
+      "id": "TF-32",
+      "module": "État passagers",
+      "name": "Registre des entrées validées",
+      "procedure": "Ouvrir /admin/registre.",
+      "expected": "Jean TESTEUR, Marie DUPONT et Afi ADJO apparaissent avec heure d'entrée et « Akosua KPOTO » comme agent.",
+      "obtained": "3 entrée(s) listée(s) avec horodatage et agent validateur.",
+      "status": "Réussi"
+    },
+    {
+      "id": "TF-33",
+      "module": "Réservation (protocole)",
+      "name": "Retour d'information au protocole",
+      "procedure": "Se reconnecter en protocole (afia@gouv.tg) et ouvrir « Mes réservations ».",
+      "expected": "Jean TESTEUR affiché « Entré <heure> ».",
+      "obtained": "Le protocole voit « Entré » avec l'heure de validation.",
+      "status": "Réussi"
+    },
+    {
+      "id": "TF-34",
+      "module": "Supervision",
+      "name": "Réassignation de salon",
+      "procedure": "Admin, /admin/supervision : bouton « Réassigner le salon » sur la réservation de Yao AMEGAN → « Salon Plus ».",
+      "expected": "Salon mis à jour, notification « Salon réassigné », entrée « Réassignation » dans le journal d'audit.",
+      "obtained": "Salon passé à « Salon Plus », audit « Salon réassigné → Salon Plus ».",
+      "status": "Réussi"
+    },
+    {
+      "id": "TF-35",
+      "module": "Supervision",
+      "name": "Révocation d'une réservation",
+      "procedure": "Cliquer « Révoquer » sur la réservation de Yao AMEGAN.",
+      "expected": "Statut « Annulée », compteur « Annulée » incrémenté, audit « Annulation ».",
+      "obtained": "Statut « Annulée », journal mis à jour.",
+      "status": "Réussi"
+    },
+    {
+      "id": "TF-36",
+      "module": "Supervision",
+      "name": "Réservation révoquée exclue du checking",
+      "procedure": "Ouvrir /admin/checking et rechercher « AMEGAN ».",
+      "expected": "Une réservation annulée ne doit plus pouvoir être validée à l'entrée.",
+      "obtained": "La réservation annulée n'est plus proposée au checking.",
+      "status": "Réussi"
+    },
+    {
+      "id": "TF-37",
+      "module": "Supervision",
+      "name": "Journal d'audit",
+      "procedure": "Consulter le « Journal d'audit » de /admin/supervision.",
+      "expected": "Les actions Création, Check-in, Réassignation, Annulation sont tracées avec leur auteur.",
+      "obtained": "Toutes les actions sont tracées (date/heure, référence, auteur).",
+      "status": "Réussi"
+    },
+    {
+      "id": "TF-38",
+      "module": "Supervision",
+      "name": "Suppression définitive avec confirmation",
+      "procedure": "Cliquer la corbeille sur la réservation AMEGAN puis confirmer « Oui ».",
+      "expected": "Réservation retirée de la liste, audit « Suppression ».",
+      "obtained": "Demande de confirmation affichée, ligne supprimée, audit « Suppression ».",
+      "status": "Réussi"
+    },
+    {
+      "id": "TF-39",
+      "module": "Exports",
+      "name": "Export PDF « État passagers »",
+      "procedure": "/admin/exports → carte « ÉTAT PASSAGERS & CONTRÔLE » → « Exporter PDF ».",
+      "expected": "Fichier PDF téléchargé et valide.",
+      "obtained": "etat-passagers-salt-1793557135495.pdf (2658 Ko, en-tête %PDF valide).",
+      "status": "Réussi"
+    },
+    {
+      "id": "TF-40",
+      "module": "Exports",
+      "name": "Export Excel « Registre des réservations »",
+      "procedure": "Carte « REGISTRE DES RÉSERVATIONS » → « Exporter Excel » ; ouvrir le fichier.",
+      "expected": "Fichier .xlsx lisible contenant les en-têtes et les réservations (dont AF 999).",
+      "obtained": "registre-reservations-salt-1793557137114.xlsx : feuille « Réservations », 11 lignes, AF 999 présent.",
+      "status": "Réussi"
+    },
+    {
+      "id": "TF-41",
+      "module": "Exports",
+      "name": "Export PDF « Bilan d'activité »",
+      "procedure": "Carte « BILAN D'ACTIVITÉ DES SALONS » → « Exporter PDF ».",
+      "expected": "Fichier PDF du rapport d'activité téléchargé.",
+      "obtained": "rapport-activite-salt-1793557137991.pdf (2634 Ko).",
+      "status": "Réussi"
+    },
+    {
+      "id": "TF-42",
+      "module": "Exports",
+      "name": "Filtre par plage de dates",
+      "procedure": "Choisir « Par plage » du J+1 au J+10.",
+      "expected": "Le total extrait se limite aux vols de la période (Koffi BIOVA, Yawa SAVI, Marc LAWSON).",
+      "obtained": "Total : 11 personnes (toutes dates) → 3 sur la plage.",
+      "status": "Réussi"
+    },
+    {
+      "id": "TF-43",
+      "module": "Exports",
+      "name": "Export CSV de l'état passagers",
+      "procedure": "/admin/registre → « Exporter » → « CSV ».",
+      "expected": "Fichier CSV contenant les entrées validées.",
+      "obtained": "ETAT-PASSAGER-1793557141289.csv : 3 ligne(s) de données.",
+      "status": "Réussi"
+    },
+    {
+      "id": "TF-44",
+      "module": "Exports",
+      "name": "Export Excel de la liste de checking",
+      "procedure": "/admin/checking → « Exporter la liste » → « Exporter en Excel ».",
+      "expected": "Fichier .xlsx de la liste de checking.",
+      "obtained": "checking-salt-1793557143511.xlsx (20 Ko).",
+      "status": "Réussi"
+    },
+    {
+      "id": "TF-45",
+      "module": "Gestion des comptes",
+      "name": "Création sans mot de passe",
+      "procedure": "Admin, /admin/systeme → « Nouvel utilisateur », saisir nom et email sans mot de passe → « Enregistrer ».",
+      "expected": "Message « Nom, email et mot de passe requis », aucun compte créé.",
+      "obtained": "« Nom, email et mot de passe requis ».",
+      "status": "Réussi"
+    },
+    {
+      "id": "TF-46",
+      "module": "Gestion des comptes",
+      "name": "Création d'une hôtesse puis connexion",
+      "procedure": "Créer « Hôtesse Recette » (recette.hotesse@salt.tg / Recette2026, Salon Plus), se déconnecter, se connecter avec ce compte.",
+      "expected": "Compte créé ; connexion réussie avec le menu hôtesse.",
+      "obtained": "Compte créé et utilisable ; 4 menus hôtesse.",
+      "status": "Réussi"
+    },
+    {
+      "id": "TF-47",
+      "module": "Gestion des comptes",
+      "name": "Création d'un protocole (code auto)",
+      "procedure": "Admin : créer « Protocole Recette » (rôle Protocole).",
+      "expected": "Code protocole unique généré automatiquement (format PTC-XXXXXX).",
+      "obtained": "« Protocole créé — code PTC-TD5X3N ».",
+      "status": "Réussi"
+    },
+    {
+      "id": "TF-48",
+      "module": "Gestion des comptes",
+      "name": "Désactivation d'un compte",
+      "procedure": "Basculer le statut de recette.hotesse@salt.tg sur « Inactif » puis tenter de se connecter.",
+      "expected": "Connexion refusée ; le compte est conservé (historique préservé).",
+      "obtained": "Statut « Inactif » ; connexion refusée (« compte inactif »).",
+      "status": "Réussi"
+    },
+    {
+      "id": "TF-49",
+      "module": "Gestion des comptes",
+      "name": "Import CSV de protocoles",
+      "procedure": "Importer un CSV (nom,prenom,email,telephone,societe,code) contenant 1 protocole, puis réimporter le même fichier.",
+      "expected": "1er import : « 1 protocole(s) importé(s) » ; 2e import : doublon ignoré.",
+      "obtained": "« 1 protocole(s) importé(s) » puis « Aucun nouveau protocole (emails déjà connus) ».",
+      "status": "Réussi"
+    },
+    {
+      "id": "TF-50",
+      "module": "Gestion des comptes",
+      "name": "Export de la liste des protocoles",
+      "procedure": "« Exporter protocoles » → « Excel ».",
+      "expected": "Fichier .xlsx du répertoire des protocoles.",
+      "obtained": "protocoles-salt-1793557162978.xlsx contenant les protocoles (dont l'importé PTC-IMP001).",
+      "status": "Réussi"
+    },
+    {
+      "id": "TF-51",
+      "module": "Administration",
+      "name": "Ajout d'une compagnie aérienne",
+      "procedure": "Onglet « Compagnies » → « Ajouter » : Air Burkina / 2J → « Enregistrer ».",
+      "expected": "Compagnie ajoutée à la liste.",
+      "obtained": "« Air Burkina (2J) » affichée.",
+      "status": "Réussi"
+    },
+    {
+      "id": "TF-52",
+      "module": "Administration",
+      "name": "Sauvegarde manuelle des données",
+      "procedure": "Onglet « Sécurité » → « Déclencher une sauvegarde ».",
+      "expected": "Fichier JSON téléchargé contenant comptes, salons et compagnies ; événement journalisé.",
+      "obtained": "sauvegarde-salt-1793557165048.json : 8 comptes, 2 salons, 7 compagnies.",
+      "status": "Réussi"
+    },
+    {
+      "id": "TF-53",
+      "module": "Analytics",
+      "name": "Tableau de bord",
+      "procedure": "Ouvrir /admin/analytics.",
+      "expected": "Indicateurs (KPI) et graphiques affichés.",
+      "obtained": "5 graphiques rendus + 4 KPI.",
+      "status": "Réussi"
+    },
+    {
+      "id": "TF-54",
+      "module": "Persistance",
+      "name": "Conservation des données après rechargement",
+      "procedure": "Recharger le navigateur (F5) sur /admin/planning.",
+      "expected": "Session et réservations conservées.",
+      "obtained": "Toujours connecté, réservation AF 999 / TESTEUR présente.",
+      "status": "Réussi"
+    },
+    {
+      "id": "TF-55",
+      "module": "Interface",
+      "name": "Thème sombre",
+      "procedure": "Cliquer « Thème sombre » puis recharger la page.",
+      "expected": "Passage en thème sombre, conservé après rechargement.",
+      "obtained": "Classe « dark » appliquée et mémorisée.",
+      "status": "Réussi"
+    },
+    {
+      "id": "TF-56",
+      "module": "Responsive",
+      "name": "Navigation sur PC",
+      "procedure": "Fenêtre 1440×900, espace admin.",
+      "expected": "Barre latérale visible, barre inférieure mobile masquée.",
+      "obtained": "Sidebar affichée, barre inférieure masquée.",
+      "status": "Réussi"
+    },
+    {
+      "id": "TF-57",
+      "module": "Responsive",
+      "name": "Navigation sur téléphone (admin)",
+      "procedure": "Viewport 390×844 ; ouvrir le menu « Plus » de la barre inférieure.",
+      "expected": "Barre inférieure visible, sidebar masquée ; « Plus » donne accès à Supervision, Exports, Analytics, Comptes.",
+      "obtained": "Barre inférieure à icônes ; menu « Plus » complet.",
+      "status": "Réussi"
+    },
+    {
+      "id": "TF-58",
+      "module": "Responsive",
+      "name": "Navigation sur téléphone (protocole)",
+      "procedure": "Viewport 390×844, connecté en protocole.",
+      "expected": "Barre inférieure : Réserver, Mes demandes, Sortir.",
+      "obtained": "Barre inférieure : Réserver, Mes demandes, Sortir.",
+      "status": "Réussi"
+    },
+    {
+      "id": "TF-59",
+      "module": "Stabilité",
+      "name": "Erreurs JavaScript pendant la recette",
+      "procedure": "Surveiller la console du navigateur pendant l'ensemble des scénarios.",
+      "expected": "Aucune erreur JavaScript.",
+      "obtained": "Aucune erreur JavaScript relevée.",
+      "status": "Réussi"
+    }
+  ]
+}
