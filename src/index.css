@@ -230,20 +230,19 @@ body {
 
 .side-link {
   display: flex; align-items: center; gap: 0.75rem;
-  padding: 0.68rem 0.9rem; border-radius: 10px;
+  padding: 0.72rem 0.9rem; border-radius: 12px;
   color: var(--sidebar-text); font-size: 0.875rem; font-weight: 500;
-  transition: background-color 0.15s ease, color 0.15s ease;
+  border-left: 3px solid transparent;
 }
 .side-link:hover {
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.06);
   color: #fff;
 }
 .side-link.active {
-  background: #fff;
-  color: var(--navy);
-  font-weight: 600;
+  background: linear-gradient(90deg, rgba(42, 159, 224, 0.22), rgba(45, 186, 75, 0.1));
+  color: #fff;
+  border-left-color: var(--brand-green);
 }
-.side-link.active svg { color: var(--brand-blue, #2A9FE0); }
 
 .bottom-nav {
   display: none;
