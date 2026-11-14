@@ -21,7 +21,7 @@ const allNav = [
 ]
 
 export default function AdminLayout() {
-  const { theme, toggleTheme, reservations, logout, user } = useAppStore()
+  const { theme, toggleTheme, reservations, logout, user, sync } = useAppStore()
   const navigate = useNavigate()
   const [time, setTime] = useState(new Date())
   const [moreOpen, setMoreOpen] = useState(false)
@@ -76,6 +76,19 @@ export default function AdminLayout() {
         </nav>
 
         <div className="px-3 py-4 flex flex-col gap-1" style={{ borderTop: '1px solid rgba(255,255,255,0.08)' }}>
+          <div className="side-link w-full text-left cursor-default" title={
+            sync === 'online' ? 'Données synchronisées en temps réel via Supabase'
+            : sync === 'connecting' ? 'Connexion à la base de données…'
+            : sync === 'error' ? 'Erreur de synchronisation (voir la console)'
+            : 'Supabase non configuré : données stockées localement'
+          }>
+            <span className="w-2.5 h-2.5 rounded-full flex-shrink-0" style={{
+              background: sync === 'online' ? 'var(--brand-green)' : sync === 'connecting' ? '#F5B942' : sync === 'error' ? '#E5484D' : '#8FA3BC',
+            }} />
+            <span className="text-xs">
+              {sync === 'online' ? 'Base en ligne' : sync === 'connecting' ? 'Connexion…' : sync === 'error' ? 'Sync. en erreur' : 'Mode local'}
+            </span>
+          </div>
           <button onClick={toggleTheme} className="side-link w-full text-left">
             {theme === 'dark' ? <Sun size={16} /> : <Moon size={16} />}
             <span>Thème {theme === 'dark' ? 'clair' : 'sombre'}</span>

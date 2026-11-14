@@ -1,4 +1,6 @@
 import { createContext, useContext, useState, useEffect, useCallback, type ReactNode } from 'react'
+import { useSyncedCollection, type SyncStatus } from '../lib/sync'
+import { supabaseEnabled } from '../lib/supabase'
 import { uid, fmtTime, fmtDate, passengerFullName, splitPassengerName, splitAccountName, countCompanions, generateProtocolCode, getCheckinDateStatus } from '../lib/utils'
 
 export type Role = 'admin' | 'hostess' | 'protocole' | 'supervisor' | 'vip'
@@ -119,7 +121,7 @@ export interface Toast { id: string; type: ToastType; message: string }
 export interface StaffUser { id: string; nom: string; role: string; salon: string; actif: boolean }
 export interface SalonConfig { id: string; nom: string; capacite: number; quota: number; actif: boolean }
 export interface Compagnie { id: string; nom: string; code: string }
-export interface AuditEntry { time: string; action: string; resa: string; user: string; detail: string }
+export interface AuditEntry { id?: string; time: string; action: string; resa: string; user: string; detail: string }
 export interface ProfileData { societe: string; protocole: string; telephone: string; email: string }
 
 export type NewCompanion = Omit<Companion, 'id' | 'checkedIn' | 'checkedAt' | 'checkedBy'>
@@ -163,6 +165,8 @@ interface AppStore {
   addCompagnie: (c: Omit<Compagnie, 'id'>) => void
   updateCompagnie: (id: string, patch: Partial<Compagnie>) => void
   audit: AuditEntry[]
+  /** Statut de la synchronisation Supabase ('local' si non configurée). */
+  sync: SyncStatus
   addAudit: (e: Omit<AuditEntry, 'time'>) => void
   profile: ProfileData
   saveProfile: (p: ProfileData) => void
@@ -467,8 +471,8 @@ const SEED_COMPAGNIES: Compagnie[] = [
 ]
 
 const SEED_AUDIT: AuditEntry[] = [
-  { time: '19/08 11:00', action: 'Création', resa: 'R-2026-0815', user: 'Akosua KPOTO', detail: 'Réservation hôtesse pour protocole BOAD' },
-  { time: '18/08 09:12', action: 'Création', resa: 'R-2026-0814', user: 'Mme AFIA Kodjo', detail: 'Réservation protocole — 2 passagers' },
+  { id: 'L1', time: '19/08 11:00', action: 'Création', resa: 'R-2026-0815', user: 'Akosua KPOTO', detail: 'Réservation hôtesse pour protocole BOAD' },
+  { id: 'L2', time: '18/08 09:12', action: 'Création', resa: 'R-2026-0814', user: 'Mme AFIA Kodjo', detail: 'Réservation protocole — 2 passagers' },
 ]
 
 function load<T>(key: string, fallback: T): T {
@@ -568,6 +572,32 @@ export function AppProvider({ children }: { children: ReactNode }) {
   useEffect(() => { localStorage.setItem('salt-profile', JSON.stringify(profile)) }, [profile])
   useEffect(() => { localStorage.setItem('salt-2fa', JSON.stringify(twoFA)) }, [twoFA])
 
+  // --- Synchronisation Supabase (temps réel) ---------------------------------
+  // Chaque collection partagée est miroir d'une table Supabase. Sans clés
+  // configurées (`supabaseEnabled` false), ces hooks sont inactifs et
+  // l'application reste en mode local.
+  const [sync, setSync] = useState<SyncStatus>(supabaseEnabled ? 'connecting' : 'local')
+  const [syncErrors, setSyncErrors] = useState(0)
+  const onStatus = useCallback((s: SyncStatus) => {
+    if (s === 'error') setSyncErrors(n => n + 1)
+    else setSync(prev => (prev === 'error' ? prev : s))
+  }, [])
+  useEffect(() => { if (syncErrors > 0) setSync('error') }, [syncErrors])
+
+  useSyncedCollection({ table: 'accounts', state: accounts, setState: setAccounts, hydrate: ensureProtocolCodes, onStatus })
+  useSyncedCollection({ table: 'reservations', state: reservations, setState: setReservations, hydrate: hydrateResas, onStatus })
+  useSyncedCollection({ table: 'vips', state: vips, setState: setVips, onStatus })
+  useSyncedCollection({ table: 'staff', state: staff, setState: setStaff, onStatus })
+  useSyncedCollection({ table: 'salons', state: salons, setState: setSalons, onStatus })
+  useSyncedCollection({ table: 'compagnies', state: compagnies, setState: setCompagnies, onStatus })
+  useSyncedCollection({
+    table: 'audit',
+    state: audit,
+    setState: setAudit,
+    key: e => e.id ?? `${e.time}|${e.action}|${e.resa}|${e.user}`,
+    onStatus,
+  })
+
   const toast = useCallback((message: string, type: ToastType = 'success') => {
     const id = uid('T')
     setToasts(t => [...t, { id, type, message }])
@@ -575,7 +605,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
   }, [])
 
   const dismissToast = (id: string) => setToasts(t => t.filter(x => x.id !== id))
-  const addAudit = (e: Omit<AuditEntry, 'time'>) => setAudit(a => [{ time: fmtTime(), ...e }, ...a])
+  const addAudit = (e: Omit<AuditEntry, 'time'>) => setAudit(a => [{ id: uid('L'), time: fmtTime(), ...e }, ...a])
 
   const store: AppStore = {
     theme,
@@ -758,6 +788,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
     updateCompagnie: (id, patch) => setCompagnies(list => list.map(x => x.id === id ? { ...x, ...patch } : x)),
     audit,
     addAudit,
+    sync,
     profile,
     saveProfile: setProfile,
     twoFA,
