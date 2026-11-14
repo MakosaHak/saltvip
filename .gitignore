@@ -19,3 +19,4 @@ memoire/
 memoire.txt
 COMPTES-DEMO.md
 .claude/
+!.env.example
